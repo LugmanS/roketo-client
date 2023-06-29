@@ -8,9 +8,38 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import { EndpointModalConfig, ModalType } from '../utils/Types';
 import { baseURL } from '../utils/Config';
 import axios from 'axios';
+import Select from './Select';
 
-export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlug }: { isOpen: boolean; modalConfig: EndpointModalConfig; collectionSlug: string; }) {
-    const methodOptions = ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'];
+export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlug }:
+    {
+        isOpen: boolean;
+        modalConfig: EndpointModalConfig;
+        collectionSlug: string;
+    }) {
+    const methodOptions = [
+        {
+            label: 'GET',
+            value: 'GET'
+        },
+        {
+            label: 'POST',
+            value: 'POST'
+        },
+        {
+            label: 'PUT',
+            value: 'PUT'
+        },
+        {
+            label: 'PATCH',
+            value: 'PATCH'
+        },
+        {
+            label: 'DELETE',
+            value: 'DELETE'
+        }
+
+    ];
+
     const [config, setConfig] = useState<EndpointModalConfig>(modalConfig);
     const [isLoading, setLoading] = useState(false);
     const [isSaveEnabled, setSaveEnabled] = useState(false);
@@ -88,7 +117,7 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                        <div className="fixed inset-0 bg-black bg-opacity-40" />
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
@@ -102,7 +131,7 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-md bg-neutral-800 p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-xl transform overflow-hidden rounded-md bg-neutral-900 border border-neutral-800 p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-white"
@@ -111,19 +140,17 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
                                     </Dialog.Title>
                                     <div className='flex flex-col items-center justify-between w-full gap-4 mt-2'>
                                         <div className='flex flex-col items-start gap-1 w-full'>
-                                            <label className='text-gray-500 text-sm'>Path</label>
-                                            <input type="text" name="path" autoComplete='off' value={config.values.path} className='w-full px-3 py-1.5 text-sm bg-transparent text-white rounded border border-gray-500 focus:border-gray-200 focus:outline-none' placeholder='/users' onChange={(e) => onChange('path', e.target.value)} />
+                                            <label className='text-gray-500 text-sm'>Request Path</label>
+                                            <input type="text" name="path" autoComplete='off' value={config.values.path} className='w-full px-3 py-1.5 text-sm bg-transparent text-white rounded border border-neutral-800 focus:border-gray-200 focus:outline-none' placeholder='/users' onChange={(e) => onChange('path', e.target.value)} />
                                         </div>
                                         <div className='flex items-center justify-between w-full gap-2'>
                                             <div className='flex flex-col items-start gap-1 w-full'>
-                                                <label className='text-gray-500 text-sm'>Method</label>
-                                                <select className='w-full px-3 py-1.5 text-sm bg-transparent text-white rounded border border-gray-500 focus:outline-none focus:border-gray-200' value={config.values.method} name="method" onChange={(e) => onChange('method', e.target.value)}>
-                                                    {methodOptions.map((method, index) => <option key={index} className="">{method}</option>)}
-                                                </select>
+                                                <label className='text-gray-500 text-sm'>Request Method</label>
+                                                <Select value={config.values.method} options={methodOptions} onChange={(value) => onChange('method', value)} />
                                             </div>
                                             <div className='flex flex-col items-start gap-1 w-full'>
                                                 <label className='text-gray-500 text-sm'>Response Status</label>
-                                                <input type="number" min='200' max="599" name='statusCode' value={config.values.statusCode} className='w-full px-3 py-1.5 text-sm bg-transparent text-white rounded border border-gray-500 focus:outline-none focus:border-gray-200' onChange={(e) => onChange('statusCode', e.target.value)} />
+                                                <input type="number" min='200' max="599" name='statusCode' value={config.values.statusCode} className='w-full px-3 py-1.5 text-sm bg-transparent text-white rounded border border-neutral-800 focus:outline-none focus:border-gray-200' onChange={(e) => onChange('statusCode', e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='flex flex-col items-start gap-1 w-full h-36'>
@@ -141,6 +168,7 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
                                                 theme="twilight"
                                                 name="UNIQUE_ID_OF_DIV"
                                                 editorProps={{ $blockScrolling: true }}
+                                                className="border border-neutral-800 rounded"
                                             />
                                         </div>
                                         <div className='flex flex-col items-start gap-1 w-full h-36'>
@@ -155,6 +183,7 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
                                                 theme="twilight"
                                                 name="UNIQUE_ID_OF_DIV"
                                                 editorProps={{ $blockScrolling: true }}
+                                                className="border border-neutral-800 rounded"
                                             />
                                         </div>
                                     </div>
