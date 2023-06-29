@@ -29,7 +29,7 @@ const Dashboard = () => {
     const getCollectionEndpoints = async () => {
         setEndpointsLoading(true);
         try {
-            let response = await (await axios.get(`${baseURL}/collection/${collectionSlug}`)).data;
+            let response = await (await axios.get(`${baseURL}/collections/${collectionSlug}`)).data;
             response = response.map((endpoint: string) => JSON.parse(endpoint));
             setEndpoints(response);
             setEndpointsLoading(false);
@@ -43,7 +43,7 @@ const Dashboard = () => {
         setDeletingIndex(index);
         const endpointId = btoa(`${collectionSlug}-${endpointConfig.method}-${endpointConfig.path}`);
         try {
-            await axios.delete(`${baseURL}/collection/${collectionSlug}/endpoint/${endpointId}`);
+            await axios.delete(`${baseURL}/collections/${collectionSlug}/endpoint/${endpointId}`);
             setDeletingIndex(null);
             getCollectionEndpoints();
         } catch (error) {

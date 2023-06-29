@@ -30,7 +30,7 @@ const Home = () => {
             }
         }
         try {
-            await axios.post(`${baseURL}/collection`, {
+            await axios.post(`${baseURL}/collections`, {
                 collectionId
             }, {
                 headers: {
