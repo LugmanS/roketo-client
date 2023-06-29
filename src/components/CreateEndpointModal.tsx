@@ -15,7 +15,8 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
     const [isLoading, setLoading] = useState(false);
     const [isSaveEnabled, setSaveEnabled] = useState(false);
 
-    console.log(modalConfig);
+    const [headers, setHeaders] = useState(JSON.stringify(config.values.headers, null, '\t'));
+    const [headerError, setHeaderError] = useState(false);
 
     const createEndpoint = async () => {
         setLoading(true);
@@ -35,8 +36,9 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
 
     const updateEndpoint = async () => {
         setLoading(true);
+        const endpointId = btoa(`${collectionSlug}-${modalConfig.values.method}-${modalConfig.values.path}`);
         try {
-            await axios.put(`${baseURL}/collection/${collectionSlug}/endpoint`, { ...config.values }, {
+            await axios.put(`${baseURL}/collection/${collectionSlug}/endpoint/${endpointId}`, { ...config.values }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -44,16 +46,24 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
             setLoading(false);
             config.onClose(true);
         } catch (error) {
+            setLoading(false);
             console.log(error);
         }
     };
 
     const onSubmit = () => {
-        // const value = { ...config.values };
-        // if (!value.method || !value.path || !value.headers || !value.body || !value.statusCode) {
-        //     return;
-        // }
         config.type === ModalType.CREATE ? createEndpoint() : updateEndpoint();
+    };
+
+    const onHeaderChange = (value: string) => {
+        setHeaders(value);
+        try {
+            const parsed = JSON.parse(value);
+            onChange('headers', parsed);
+            setHeaderError(false);
+        } catch (error) {
+            setHeaderError(true);
+        }
     };
 
     const onChange = (key: string, value: string) => {
@@ -119,15 +129,14 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
                                         <div className='flex flex-col items-start gap-1 w-full h-36'>
                                             <div className='flex justify-between items-center w-full'>
                                                 <label className='text-gray-500 text-sm'>Response Headers</label>
-                                                {/* {headerError && <p className='text-red-400 text-xs'>Headers should be of type JSON</p>} */}
+                                                {headerError && <p className='text-red-400 text-xs'>Headers should be of type JSON</p>}
                                             </div>
                                             <AceEditor
                                                 style={{
                                                     width: "100%"
                                                 }}
-                                                value={JSON.stringify(config.values.headers, null, '\t')}
-                                                onChange={(value) => onChange('headers', value)}
-                                                // value={config.values.body}
+                                                value={headers}
+                                                onChange={onHeaderChange}
                                                 mode="json"
                                                 theme="twilight"
                                                 name="UNIQUE_ID_OF_DIV"

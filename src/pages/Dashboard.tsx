@@ -1,4 +1,4 @@
-import { FiEdit, FiGithub, FiGlobe, FiPlus, FiTrash2 } from "react-icons/fi";
+import { FiEdit, FiGlobe, FiPlus, FiTrash2 } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import EndpointConfigModal from "../components/CreateEndpointModal";
 import Spinner from "../components/Spinner";
@@ -6,11 +6,12 @@ import axios from "axios";
 import { baseURL } from "../utils/Config";
 import { Endpoint, EndpointModalConfig, Method, ModalType } from "../utils/Types";
 import TableSkeleton from "../components/TableSkeleton";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Dashboard = () => {
     const { collectionSlug } = useParams();
+    const navigate = useNavigate();
     const initialEndpointConfig = {
         path: '',
         method: Method.GET,
@@ -24,6 +25,7 @@ const Dashboard = () => {
 
     const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
     const [isEndpointsLoading, setEndpointsLoading] = useState(false);
+
     const getCollectionEndpoints = async () => {
         setEndpointsLoading(true);
         try {
@@ -73,6 +75,7 @@ const Dashboard = () => {
         setConfigModalOpen(true);
     };
 
+    const moveToConfigure = () => navigate(`/collections/${collectionSlug}/inspect`);
 
     useEffect(() => {
         getCollectionEndpoints();
@@ -82,14 +85,17 @@ const Dashboard = () => {
         <div className="bg-neutral-900 w-full min-h-screen">
             <Navbar />
             <div className="max-w-5xl mx-auto">
-                <section className="w-full bg-opacity-50 rounded pt-20 pb-4">
-                    <h1 className="text-xl text-white" >👋 Welcome back,</h1>
-                    <div className="my-2">
-                        <div className="flex items-center gap-2">
-                            <FiGlobe className="text-white w-6 h-6" />
-                            <h1 className="text-white text-2xl">{collectionSlug}.roketo.com</h1>
+                <section className="w-full bg-opacity-50 rounded pt-20 pb-4 flex items-start justify-between">
+                    <div>
+                        <h1 className="text-lg text-white" >👋 Welcome back</h1>
+                        <div className="my-2">
+                            <div className="flex items-center gap-1">
+                                <FiGlobe className="text-white w-5 h-5" />
+                                <h1 className="text-white text-xl">{collectionSlug}.roketo.cloud</h1>
+                            </div>
                         </div>
                     </div>
+                    <button className="px-4 py-2 border border-gray-400 text-gray-400 hover:border-white hover:text-white transition duration-150 text-sm rounded" onClick={moveToConfigure}>Inspect requests</button>
                 </section>
                 <div className="flex items-center justify-between mt-2">
                     <h1 className="text-gray-300 text-lg font-medium">API endpoints</h1>
@@ -135,7 +141,7 @@ const Dashboard = () => {
                         </table>
                     }
                 </div>
-                <EndpointConfigModal isOpen={configModalOpen} modalConfig={endpointModalConfig} collectionSlug={collectionSlug} />
+                {collectionSlug && <EndpointConfigModal isOpen={configModalOpen} modalConfig={endpointModalConfig} collectionSlug={collectionSlug} />}
                 <div className="h-40"></div>
             </div>
         </div>
