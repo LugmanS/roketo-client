@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiArrowRight, FiCheckCircle, FiCopy, FiLifeBuoy, FiLogIn, FiSettings } from "react-icons/fi";
+import { FiArrowRight, FiCheckCircle, FiCopy, FiLifeBuoy } from "react-icons/fi";
 import { RiRouteLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
