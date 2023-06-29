@@ -15,8 +15,6 @@ const Home = () => {
     const [collections, setCollections] = useState([]);
     const [isCreateLoading, setCreateLoading] = useState(false);
 
-    Array.from({ length: 10 }).map((data) => console.log(data));
-
     useEffect(() => {
         const storedCollectionSlugs = localStorage.getItem('collectionSlugs');
         storedCollectionSlugs && setCollections(JSON.parse(storedCollectionSlugs));
@@ -39,7 +37,6 @@ const Home = () => {
                 }
             });
             setCreateLoading(false);
-            console.log(JSON.stringify([...collections, collectionId]));
             localStorage.setItem('collectionSlugs', JSON.stringify([...collections, collectionId]));
             navigate(`/collections/${collectionId}`);
         } catch (error) {
@@ -72,7 +69,7 @@ const Home = () => {
                     </h1>
                     <h2 className="text-gray-400 text-lg">Create an collection and configure endpoint in no time</h2>
                     <form className="flex items-center border rounded" onSubmit={onSubmit}>
-                        <input className="w-64 px-4 py-2 rounded-md bg-transparent focus:outline-none" required type="text" minLength={5} maxLength={30} placeholder="Your collection name" onChange={(e) => setCollectionId(e.target.value)} />
+                        <input className="w-64 px-4 py-2 rounded-md bg-transparent focus:outline-none" pattern="[a-zA-Z0-9]+" title="Only alphabets and numbers are allowed" required type="text" minLength={5} maxLength={30} placeholder="Your collection name" onChange={(e) => setCollectionId(e.target.value)} />
                         <button type="submit" className="px-4 py-2 bg-white text-black whitespace-nowrap flex items-center gap-2" disabled={isCreateLoading}>
                             {isCreateLoading && <Spinner className="w-5 h-5" />} Get started
                         </button>
