@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FiGlobe, FiRefreshCw } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { socket } from "../utils/socket";
+import { socket } from "../utils/Config";
 import { v4 as uuidv4 } from "uuid";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-json";

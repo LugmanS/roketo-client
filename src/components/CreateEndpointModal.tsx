@@ -21,7 +21,7 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
     const createEndpoint = async () => {
         setLoading(true);
         try {
-            await axios.post(`${baseURL}/collection/${collectionSlug}/endpoint`, { ...config.values }, {
+            await axios.post(`${baseURL}/collections/${collectionSlug}/endpoint`, { ...config.values }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -38,7 +38,7 @@ export default function EndpointConfigModal({ isOpen, modalConfig, collectionSlu
         setLoading(true);
         const endpointId = btoa(`${collectionSlug}-${modalConfig.values.method}-${modalConfig.values.path}`);
         try {
-            await axios.put(`${baseURL}/collection/${collectionSlug}/endpoint/${endpointId}`, { ...config.values }, {
+            await axios.put(`${baseURL}/collections/${collectionSlug}/endpoint/${endpointId}`, { ...config.values }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
